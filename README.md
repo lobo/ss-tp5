@@ -35,11 +35,27 @@ Receives a JSON file with the following format:
 
 ```json
 {
-    "output"    : "res/data/output.data",
-    "delta"     : "1.0",
-    "fps"       : "1.0",
-    "time"      : "1.0"
+    "output"            : "res/data/output.data",
+    "delta"             : "0.001",
+    "time"              : "5.0",
+    "fps"               : "50",
+
+    "integrator"        : "BeemanIntegrator",
+    "radius"            : ["0.02", "0.03"],
+    "mass"              : "0.01",
+
+    "elasticNormal"     : "1.0E+5",
+    "elasticTangent"    : "2.0E+5",
+    "gamma"             : "1.0E+2",
+
+    "generator"         : "64684095347601931",
+    "n"                 : "100",
+    "height"            : "4.0",
+    "width"             : "1.0",
+    "drain"             : "0.15",
+    "flowRate"          : "0.1"
 }
+
 ```
 
 ## Output Files Format
@@ -47,7 +63,7 @@ Receives a JSON file with the following format:
 ### Simulation File (_\*.data_)
 
 ```
-<x> <y> <r> <vx> <vy>
+<x> <y> <r> <speed>
 ...
 ```
 
@@ -56,7 +72,7 @@ Receives a JSON file with the following format:
 ```
 <N>
 <t0>
-<x> <y> <r> <vx> <vy>
+<x> <y> <r> <speed>
 ...
 ```
 
