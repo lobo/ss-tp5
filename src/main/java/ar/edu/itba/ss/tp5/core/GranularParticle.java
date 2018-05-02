@@ -40,7 +40,9 @@
 		}
 
 		public <T extends Particle> double ξ0(final T particle) {
-			return -distance(particle);
+			final double ξ0 = -distance(particle);
+			//return 0 < ξ0? ξ0 : 0.0;
+			return ξ0;
 		}
 
 		public <T extends MobileParticle> double ξ1(final T particle) {
@@ -51,5 +53,9 @@
 			return Vector
 					.of(particle.getX() - x, particle.getY() - y)
 					.versor();
+		}
+
+		public <T extends MobileParticle> Vector relativeVelocity(final T particle) {
+			return Vector.of(vx - particle.getVx(), vy - particle.getVy());
 		}
 	}

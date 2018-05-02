@@ -5,13 +5,46 @@
 
 	import ar.edu.itba.ss.tp4.core.Vector;
 	import ar.edu.itba.ss.tp4.interfaces.ForceField;
+	import ar.edu.itba.ss.tp5.config.Configuration;
 
 	public class DryFrictionForce<T extends GranularParticle>
 		implements ForceField<T> {
 
+		protected final NeighbourCache cache;
+		protected final double [] space;
+		protected final double drain;
+		protected final double k;
+
+		public DryFrictionForce(
+				final Configuration configuration,
+				final NeighbourCache cache) {
+			this.space = new double [] {
+				configuration.getWidth(),
+				configuration.getHeight()
+			};
+			this.cache = cache;
+			this.drain = configuration.getDrain();
+			this.k = configuration.getElasticTangent();
+		}
+
 		@Override
 		public Vector apply(final List<T> state, final T body) {
-			return Vector.ZERO;
+			final double leftξ0 = body.leftξ0();
+			final double rightξ0 = body.rightξ0(space[0]);
+			final double floorξ0 = body.floorξ0();
+			return Vector.of(0.0, -k * leftξ0 * body.getVy())
+					.add(Vector.of(0.0, -k * rightξ0 * body.getVy()))
+					.add(Vector.of(-k * floorξ0 * body.getVx(), 0.0))
+					.add(cache.neighbours(state)
+						.get(body)
+						.stream()
+						.map(p -> {
+							final GranularParticle gp = (GranularParticle) p;
+							final Vector t = body.normal(p).tangent();
+							final double ξ0 = body.ξ0(p);
+							return t.multiplyBy(-k * ξ0 * body.relativeVelocity(gp).dot(t));
+						})
+						.reduce(Vector.ZERO, (F1, F2) -> F1.add(F2)));
 		}
 
 		@Override

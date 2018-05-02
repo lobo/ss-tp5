@@ -10,14 +10,19 @@
 	public class GranularFlow<T extends GranularParticle>
 		implements ForceField<T> {
 
+		protected final NeighbourCache cache;
 		protected final EarthGravity<T> gravity;
 		protected final ContactForce<T> contact;
 		protected final DryFrictionForce<T> friction;
 
 		public GranularFlow(final Configuration configuration) {
+			this.cache = NeighbourCache.ofDeep(2)
+				.space(configuration.getWidth(), configuration.getHeight())
+				.interactionRadius(configuration.getRadius()[1])
+				.build();
 			this.gravity = new EarthGravity<>();
-			this.contact = new ContactForce<>(configuration);
-			this.friction = new DryFrictionForce<>();
+			this.contact = new ContactForce<>(configuration, cache);
+			this.friction = new DryFrictionForce<>(configuration, cache);
 		}
 
 		@Override

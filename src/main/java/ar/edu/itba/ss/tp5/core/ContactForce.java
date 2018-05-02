@@ -16,15 +16,14 @@
 		protected final double k;
 		protected final double γ;
 
-		public ContactForce(final Configuration configuration) {
+		public ContactForce(
+				final Configuration configuration,
+				final NeighbourCache cache) {
 			this.space = new double [] {
 				configuration.getWidth(),
 				configuration.getHeight()
 			};
-			this.cache = NeighbourCache.ofDeep(2)
-				.space(space[0], space[1])
-				.interactionRadius(configuration.getRadius()[1])
-				.build();
+			this.cache = cache;
 			this.drain = configuration.getDrain();
 			this.k = configuration.getElasticNormal();
 			this.γ = configuration.getViscousDamping();
