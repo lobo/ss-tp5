@@ -3,7 +3,7 @@
 
 	import java.util.List;
 
-	import ar.edu.itba.ss.tp3.core.MassiveParticle;
+	import ar.edu.itba.ss.tp4.core.MassiveParticleFactory;
 	import ar.edu.itba.ss.tp4.core.TimeDrivenSimulation;
 	import ar.edu.itba.ss.tp4.integrators.BeemanIntegrator;
 	import ar.edu.itba.ss.tp4.integrators.GearIntegrator;
@@ -13,6 +13,8 @@
 	import ar.edu.itba.ss.tp5.config.Configuration;
 	import ar.edu.itba.ss.tp5.core.Generator;
 	import ar.edu.itba.ss.tp5.core.GranularFlow;
+	import ar.edu.itba.ss.tp5.core.GranularParticle;
+	import ar.edu.itba.ss.tp5.core.GranularParticleFactory;
 	import ar.edu.itba.ss.tp5.interfaces.Mode;
 	import ar.edu.itba.ss.tp5.io.OutputFile;
 
@@ -31,7 +33,8 @@
 						TimeDrivenSimulation.of(
 								buildIntegrator(
 									configuration,
-									new GranularFlow(configuration),
+									new GranularParticleFactory<GranularParticle>(),
+									new GranularFlow<GranularParticle>(configuration),
 									Generator.with(configuration.getGenerator(), configuration.getN())
 										.in(configuration.getWidth(), configuration.getHeight())
 										.mass(configuration.getMass())
@@ -39,6 +42,7 @@
 										.maxRadius(configuration.getRadius()[1])
 											.build()
 										.getParticles()))
+							.reportEnergy(configuration.getReportEnergy())
 							.maxTime(configuration.getTime())
 							.by(configuration.getDelta())
 							.spy(output::write)
@@ -55,27 +59,31 @@
 				});
 		}
 
-		protected static Integrator<MassiveParticle> buildIntegrator(
+		protected static <T extends GranularParticle> Integrator<T> buildIntegrator(
 				final Configuration configuration,
-				final ForceField<MassiveParticle> force,
-				final List<MassiveParticle> state)
+				final MassiveParticleFactory<T> factory,
+				final ForceField<T> force,
+				final List<T> state)
 					throws ClassNotFoundException {
 
 			switch (configuration.getIntegrator()) {
 				case "VelocityVerlet" : {
 					return VelocityVerlet.of(force)
 							.withInitial(state)
+							.factory(factory)
 							.build();
 				}
 				case "BeemanIntegrator" : {
 					return BeemanIntegrator.of(force)
 							.withInitial(state)
+							.factory(factory)
 							.build();
 				}
 				case "GearIntegrator" : {
 					return GearIntegrator.of(force)
 							.Δt(configuration.getDelta())
 							.withInitial(state)
+							.factory(factory)
 							.build();
 				}
 				default : {

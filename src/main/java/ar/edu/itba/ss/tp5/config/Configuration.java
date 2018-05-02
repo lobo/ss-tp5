@@ -15,17 +15,18 @@
 			= "config.json";
 
 		protected String output = "res/data/output.data";
-		protected double delta = 0.001;
+		protected double delta = 0.0001;
 		protected double time = 10.0;
 		protected int fps = 50;
 
 		protected String integrator = "BeemanIntegrator";
+		protected boolean reportEnergy = true;
 		protected double [] radius = {0.02, 0.03};
 		protected double mass = 0.01;
 
 		protected double elasticNormal = 1.0E+5;
 		protected double elasticTangent = 2.0E+5;
-		protected double gamma = 1.0E+2;
+		protected double viscousDamping = 0.0;
 
 		protected long generator = System.nanoTime();
 		protected int n = 100;
@@ -54,6 +55,10 @@
 			return integrator;
 		}
 
+		public boolean getReportEnergy() {
+			return reportEnergy;
+		}
+
 		public double [] getRadius() {
 			return radius;
 		}
@@ -70,8 +75,8 @@
 			return elasticTangent;
 		}
 
-		public double getGamma() {
-			return gamma;
+		public double getViscousDamping() {
+			return viscousDamping;
 		}
 
 		public long getGenerator() {
@@ -106,11 +111,12 @@
 					.append("\tTime: " + time + " [s]\n")
 					.append("\tFPS: " + fps + "\n")
 					.append("\tIntegrator: " + integrator + "\n")
+					.append("\tReport Energy?: " + reportEnergy + "\n")
 					.append("\tRadius: (" + radius[0] + ", " + radius[1] + ") [m]\n")
 					.append("\tMass: " + mass + " [kg]\n")
 					.append("\tElastic (normal): " + elasticNormal + " [N/m]\n")
 					.append("\tElastic (tangent): " + elasticTangent + " [N/m]\n")
-					.append("\tFluid Gamma: " + gamma + " [kg/s]\n")
+					.append("\tFluid Gamma: " + viscousDamping + " [kg/s]\n")
 					.append("\tGenerator Seed: " + generator + "\n")
 					.append("\tN: " + n + " particles\n")
 					.append("\tHeight: " + height + " [m]\n")

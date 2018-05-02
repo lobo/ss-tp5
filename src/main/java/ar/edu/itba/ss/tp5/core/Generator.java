@@ -5,12 +5,11 @@
 	import java.util.List;
 	import java.util.Random;
 
-	import ar.edu.itba.ss.tp3.core.MassiveParticle;
 	import ar.edu.itba.ss.tp4.core.Vector;
 
 	public class Generator {
 
-		protected final List<MassiveParticle> particles;
+		protected final List<GranularParticle> particles;
 		protected final Random random;
 
 		public Generator(final Builder builder) {
@@ -28,22 +27,22 @@
 			return new Builder(seed, size);
 		}
 
-		public List<MassiveParticle> getParticles() {
+		public List<GranularParticle> getParticles() {
 			return particles;
 		}
 
-		protected MassiveParticle newParticle(final Builder builder) {
+		protected GranularParticle newParticle(final Builder builder) {
 			final double Δradius = builder.maxRadius - builder.minRadius;
 			final double radius = Δradius * random.nextDouble() + builder.minRadius;
 			final Vector r0 = Vector.of(radius, radius)
 					.add(Vector.of(
 						(builder.space.getX() - 2.0 * radius) * random.nextDouble(),
 						(builder.space.getY() - 2.0 * radius) * random.nextDouble()));
-			return new MassiveParticle(r0.getX(), r0.getY(), radius, 0.0, 0.0, builder.mass);
+			return new GranularParticle(r0.getX(), r0.getY(), radius, 0.0, 0.0, builder.mass);
 		}
 
 		protected boolean addWithoutCollision(final Builder builder) {
-			final MassiveParticle particle = newParticle(builder);
+			final GranularParticle particle = newParticle(builder);
 			final boolean collide = particles.stream()
 					.anyMatch(particle::overlap);
 			if (!collide) {

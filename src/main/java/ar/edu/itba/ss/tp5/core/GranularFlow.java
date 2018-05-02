@@ -3,30 +3,30 @@
 
 	import java.util.List;
 
-	import ar.edu.itba.ss.tp3.core.MassiveParticle;
 	import ar.edu.itba.ss.tp4.core.Vector;
 	import ar.edu.itba.ss.tp4.interfaces.ForceField;
 	import ar.edu.itba.ss.tp5.config.Configuration;
 
-	public class GranularFlow implements ForceField<MassiveParticle> {
+	public class GranularFlow<T extends GranularParticle>
+		implements ForceField<T> {
 
-		protected final EarthGravity gravity;
-		protected final ContactForce contact;
-		protected final DragForce drag;
+		protected final EarthGravity<T> gravity;
+		protected final ContactForce<T> contact;
+		protected final DryFrictionForce<T> friction;
 
 		public GranularFlow(final Configuration configuration) {
-			this.gravity = new EarthGravity();
-			this.contact = new ContactForce();
-			this.drag = new DragForce();
+			this.gravity = new EarthGravity<>();
+			this.contact = new ContactForce<>(configuration);
+			this.friction = new DryFrictionForce<>();
 		}
 
 		@Override
 		public Vector apply(
-				final List<MassiveParticle> state,
-				final MassiveParticle body) {
+				final List<T> state,
+				final T body) {
 			return gravity.apply(state, body)
 					.add(contact.apply(state, body))
-					.add(drag.apply(state, body));
+					.add(friction.apply(state, body));
 		}
 
 		@Override
@@ -41,42 +41,42 @@
 
 		@Override
 		public Vector derivative1(
-				final List<MassiveParticle> state,
-				final MassiveParticle body) {
+				final List<T> state,
+				final T body) {
 			return gravity.derivative1(state, body)
 					.add(contact.derivative1(state, body))
-					.add(drag.derivative1(state, body));
+					.add(friction.derivative1(state, body));
 		}
 
 		@Override
 		public Vector derivative2(
-				final List<MassiveParticle> state,
-				final MassiveParticle body) {
+				final List<T> state,
+				final T body) {
 			return gravity.derivative2(state, body)
 					.add(contact.derivative2(state, body))
-					.add(drag.derivative2(state, body));
+					.add(friction.derivative2(state, body));
 		}
 
 		@Override
 		public Vector derivative3(
-				final List<MassiveParticle> state,
-				final MassiveParticle body) {
-			return gravity.derivative2(state, body)
-					.add(contact.derivative2(state, body))
-					.add(drag.derivative2(state, body));
+				final List<T> state,
+				final T body) {
+			return gravity.derivative3(state, body)
+					.add(contact.derivative3(state, body))
+					.add(friction.derivative3(state, body));
 		}
 
 		@Override
 		public double energyLoss(final double time) {
 			return gravity.energyLoss(time) +
 					contact.energyLoss(time) +
-					drag.energyLoss(time);
+					friction.energyLoss(time);
 		}
 
 		@Override
-		public double potentialEnergy(final MassiveParticle body) {
+		public double potentialEnergy(final T body) {
 			return gravity.potentialEnergy(body) +
 					contact.potentialEnergy(body) +
-					drag.potentialEnergy(body);
+					friction.potentialEnergy(body);
 		}
 	}

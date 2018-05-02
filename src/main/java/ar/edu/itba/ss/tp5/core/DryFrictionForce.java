@@ -3,28 +3,25 @@
 
 	import java.util.List;
 
-	import ar.edu.itba.ss.tp3.core.MassiveParticle;
 	import ar.edu.itba.ss.tp4.core.Vector;
 	import ar.edu.itba.ss.tp4.interfaces.ForceField;
 
-	public class EarthGravity<T extends MassiveParticle>
+	public class DryFrictionForce<T extends GranularParticle>
 		implements ForceField<T> {
-
-		public static final double g = 9.8196;
 
 		@Override
 		public Vector apply(final List<T> state, final T body) {
-			return Vector.of(0.0, -g * body.getMass());
+			return Vector.ZERO;
 		}
 
 		@Override
 		public boolean isVelocityDependent() {
-			return false;
+			return true;
 		}
 
 		@Override
 		public boolean isConservative() {
-			return true;
+			return false;
 		}
 
 		@Override
@@ -44,11 +41,11 @@
 
 		@Override
 		public double energyLoss(final double time) {
-			return 0;
+			return 0.0;
 		}
 
 		@Override
 		public double potentialEnergy(final T body) {
-			return g * body.getMass() * body.getY();
+			return 0.0;
 		}
 	}
