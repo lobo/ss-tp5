@@ -11,7 +11,7 @@
 		implements ForceField<T> {
 
 		protected final NeighbourCache cache;
-		protected final double [] space;
+		protected final Vector space;
 		protected final double drain;
 		protected final double k;
 		protected final double γs;
@@ -20,10 +20,10 @@
 		public ContactForce(
 				final Configuration configuration,
 				final NeighbourCache cache) {
-			this.space = new double [] {
+			this.space = Vector.of(
 				configuration.getWidth(),
 				configuration.getHeight()
-			};
+			);
 			this.cache = cache;
 			this.drain = configuration.getDrain();
 			this.k = configuration.getElasticNormal();
@@ -34,10 +34,10 @@
 		@Override
 		public Vector apply(final List<T> state, final T body) {
 			final double leftξ0 = body.leftξ0();
-			final double rightξ0 = body.rightξ0(space[0]);
-			final double floorξ0 = body.floorξ0(space[0], drain);
+			final double rightξ0 = body.rightξ0(space.getX());
+			final double floorξ0 = body.floorξ0(space, drain);
 			final double leftξ1 = body.leftξ1(leftξ0);
-			final double rightξ1 = body.rightξ1(rightξ0, space[0]);
+			final double rightξ1 = body.rightξ1(rightξ0, space.getX());
 			final double floorξ1 = body.floorξ1(floorξ0);
 			return Vector.of(k * leftξ0 + γs * leftξ1, 0.0)
 				.add(Vector.of(-k * rightξ0 - γs * rightξ1, 0.0))

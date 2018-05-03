@@ -23,9 +23,10 @@
 			return width - x < radius? radius - width + x : 0.0;
 		}
 
-		public double floorξ0(final double width, final double drain) {
-			final double drain0 = 0.5 * (width - drain);
+		public double floorξ0(final Vector space, final double drain) {
+			final double drain0 = 0.5 * (space.getX() - drain);
 			if (drain0 < x && x < drain0 + drain) return 0.0;
+			else if (y < -radius) return 0.0;
 			else return y < radius? radius - y : 0.0;
 		}
 

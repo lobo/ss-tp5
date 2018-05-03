@@ -11,17 +11,17 @@
 		implements ForceField<T> {
 
 		protected final NeighbourCache cache;
-		protected final double [] space;
+		protected final Vector space;
 		protected final double drain;
 		protected final double k;
 
 		public DryFrictionForce(
 				final Configuration configuration,
 				final NeighbourCache cache) {
-			this.space = new double [] {
+			this.space = Vector.of(
 				configuration.getWidth(),
 				configuration.getHeight()
-			};
+			);
 			this.cache = cache;
 			this.drain = configuration.getDrain();
 			this.k = configuration.getElasticTangent();
@@ -30,8 +30,8 @@
 		@Override
 		public Vector apply(final List<T> state, final T body) {
 			final double leftξ0 = body.leftξ0();
-			final double rightξ0 = body.rightξ0(space[0]);
-			final double floorξ0 = body.floorξ0(space[0], drain);
+			final double rightξ0 = body.rightξ0(space.getX());
+			final double floorξ0 = body.floorξ0(space, drain);
 			return Vector.of(0.0, -k * leftξ0 * body.getVy())
 					.add(Vector.of(0.0, -k * rightξ0 * body.getVy()))
 					.add(Vector.of(-k * floorξ0 * body.getVx(), 0.0))

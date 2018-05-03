@@ -29,6 +29,7 @@
 		public Vector apply(
 				final List<T> state,
 				final T body) {
+			
 			return gravity.apply(state, body)
 					.add(contact.apply(state, body))
 					.add(friction.apply(state, body));

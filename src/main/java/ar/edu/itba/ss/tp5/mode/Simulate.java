@@ -47,7 +47,10 @@
 							.reportTime(configuration.getReportTime())
 							.maxTime(configuration.getTime())
 							.by(configuration.getDelta())
-							.spy(output::write)
+							.spy((time, ps) -> {
+								injector(configuration, time, ps);
+								output.write(time, ps);
+							})
 							.build()
 							.run();
 					}
@@ -59,6 +62,19 @@
 						"\tLa simulación fue almacenada con éxito.");
 					output.close();
 				});
+		}
+
+		protected void injector(
+				final Configuration configuration,
+				final double time, final List<GranularParticle> particles) {
+			for (int i = 0; i < particles.size(); ++i) {
+				final GranularParticle p = particles.get(i);
+				if (p.getY() < -0.1 * configuration.getHeight()) {
+					particles.set(i, new GranularParticle(
+						p.getX(), configuration.getHeight(), p.getRadius(),
+						0.0, 0.0, p.getMass()));
+				}
+			}
 		}
 
 		protected static <T extends GranularParticle> Integrator<T> buildIntegrator(
