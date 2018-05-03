@@ -20,7 +20,7 @@
 		}
 
 		public double rightξ0(final double width) {
-			return width - x < radius? radius + x - width : 0.0;
+			return width - x < radius? radius - width + x : 0.0;
 		}
 
 		public double floorξ0() {
@@ -28,25 +28,30 @@
 		}
 
 		public double leftξ1(final double leftξ0) {
-			return 0.0 < leftξ0? -Math.abs(vx) : 0.0;
+			return 0.0 < leftξ0? -vx : 0.0;
 		}
 
-		public double rightξ1(final double rightξ0) {
-			return 0.0 < rightξ0? -Math.abs(vx) : 0.0;
+		public double rightξ1(final double rightξ0, final double width) {
+			return 0.0 < rightξ0? vx : 0.0;
 		}
 
 		public double floorξ1(final double floorξ0) {
-			return 0.0 < floorξ0? -Math.abs(vy) : 0.0;
+			return 0.0 < floorξ0? -vy : 0.0;
 		}
 
 		public <T extends Particle> double ξ0(final T particle) {
 			final double ξ0 = -distance(particle);
-			//return 0 < ξ0? ξ0 : 0.0;
-			return ξ0;
+			return 0.0 < ξ0? ξ0 : 0.0;
 		}
 
-		public <T extends MobileParticle> double ξ1(final T particle) {
-			return -Math.hypot(particle.getVx() - vx, particle.getVy() - vy);
+		public <T extends MobileParticle> double ξ1(final double ξ0, final T particle) {
+			if (0.0 < ξ0) {
+				final double Δx = x - particle.getX();
+				final double Δy = y - particle.getY();
+				return -((Δx * (vx - particle.getVx()) + Δy * (vy - particle.getVy()))
+						/ Math.hypot(Δx, Δy));
+			}
+			else return 0.0;
 		}
 
 		public <T extends Particle> Vector normal(final T particle) {

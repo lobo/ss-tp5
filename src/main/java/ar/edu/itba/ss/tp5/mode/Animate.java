@@ -11,9 +11,7 @@
 		@Override
 		public void run(final Configuration configuration) {
 			System.out.println("Animation...");
-			if (OvitoFile.generate(
-					configuration.getOutput(), configuration.getFPS(),
-					configuration.getN(), configuration.getDelta())) {
+			if (OvitoFile.generate(configuration)) {
 
 				System.out.println(
 					"\tLa animación fue generada con éxito.");

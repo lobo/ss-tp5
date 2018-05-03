@@ -36,23 +36,26 @@ Receives a JSON file with the following format:
 ```json
 {
     "output"            : "res/data/output.data",
-    "delta"             : "0.0001",
+    "delta"             : "0.00001",
     "time"              : "5.0",
     "fps"               : "50",
+    "playbackSpeed"     : "1.0",
 
     "integrator"        : "BeemanIntegrator",
     "reportEnergy"      : "false",
-    "radius"            : ["0.02", "0.03"],
+    "reportTime"        : "false",
+    "radius"            : ["0.01", "0.015"],
     "mass"              : "0.01",
 
-    "elasticNormal"     : "1.0E+5",
-    "elasticTangent"    : "2.0E+5",
-    "viscousDamping"    : "0.0",
+    "elasticNormal"     : "1.0E+3",
+    "elasticTangent"    : "2.0E+3",
+    "viscousDamping"    : "1.0E+2",
+    "siloDamping"       : "20.0",
 
     "generator"         : "64684095347601931",
     "n"                 : "100",
-    "height"            : "4.0",
-    "width"             : "1.0",
+    "height"            : "1.0",
+    "width"             : "0.25",
     "drain"             : "0.15",
     "flowRate"          : "0.1"
 }

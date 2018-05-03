@@ -15,23 +15,26 @@
 			= "config.json";
 
 		protected String output = "res/data/output.data";
-		protected double delta = 0.0001;
-		protected double time = 10.0;
+		protected double delta = 0.00001;
+		protected double time = 5.0;
 		protected int fps = 50;
+		protected double playbackSpeed = 1.0;
 
 		protected String integrator = "BeemanIntegrator";
-		protected boolean reportEnergy = true;
-		protected double [] radius = {0.02, 0.03};
+		protected boolean reportEnergy = false;
+		protected boolean reportTime = true;
+		protected double [] radius = {0.01, 0.015};
 		protected double mass = 0.01;
 
-		protected double elasticNormal = 1.0E+5;
-		protected double elasticTangent = 2.0E+5;
-		protected double viscousDamping = 0.0;
+		protected double elasticNormal = 1.0E+3;
+		protected double elasticTangent = 2.0E+3;
+		protected double viscousDamping = 1.0E+2;
+		protected double siloDamping = 20.0;
 
 		protected long generator = System.nanoTime();
 		protected int n = 100;
-		protected double height = 2.0;
-		protected double width = 1.0;
+		protected double height = 1.0;
+		protected double width = 0.25;
 		protected double drain = 0.15;
 		protected double flowRate = 0.1;
 
@@ -51,12 +54,20 @@
 			return fps;
 		}
 
+		public double getPlaybackSpeed() {
+			return playbackSpeed;
+		}
+
 		public String getIntegrator() {
 			return integrator;
 		}
 
 		public boolean getReportEnergy() {
 			return reportEnergy;
+		}
+
+		public boolean getReportTime() {
+			return reportTime;
 		}
 
 		public double [] getRadius() {
@@ -77,6 +88,10 @@
 
 		public double getViscousDamping() {
 			return viscousDamping;
+		}
+
+		public double getSiloDamping() {
+			return siloDamping;
 		}
 
 		public long getGenerator() {
@@ -105,18 +120,21 @@
 
 		@Override
 		public String toString() {
-			return new StringBuilder(376)
+			return new StringBuilder(512)
 					.append("\tOutput: " + output + "\n")
 					.append("\tDelta: " + delta + " [s]\n")
 					.append("\tTime: " + time + " [s]\n")
 					.append("\tFPS: " + fps + "\n")
+					.append("\tPlayback Speed: x" + playbackSpeed + "\n")
 					.append("\tIntegrator: " + integrator + "\n")
 					.append("\tReport Energy?: " + reportEnergy + "\n")
+					.append("\tReport Time?: " + reportTime + "\n")
 					.append("\tRadius: (" + radius[0] + ", " + radius[1] + ") [m]\n")
 					.append("\tMass: " + mass + " [kg]\n")
 					.append("\tElastic (normal): " + elasticNormal + " [N/m]\n")
 					.append("\tElastic (tangent): " + elasticTangent + " [N/m]\n")
 					.append("\tFluid Gamma: " + viscousDamping + " [kg/s]\n")
+					.append("\tSilo Fluid Gamma: " + siloDamping + " [kg/s]\n")
 					.append("\tGenerator Seed: " + generator + "\n")
 					.append("\tN: " + n + " particles\n")
 					.append("\tHeight: " + height + " [m]\n")

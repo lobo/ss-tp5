@@ -8,17 +8,21 @@
 	import java.io.PrintWriter;
 	import java.util.Scanner;
 
+	import ar.edu.itba.ss.tp5.config.Configuration;
+
 	public class OvitoFile {
 
-		public static boolean generate(
-				final String filename,
-				final int FPS, final int N, final double Δt) {
-
+		public static boolean generate(final Configuration configuration) {
+			final String filename = configuration.getOutput();
+			final int FPS = configuration.getFPS();
+			final int N = configuration.getN();
+			final double Δt = configuration.getDelta();
+			final double playbackSpeed = configuration.getPlaybackSpeed();
 			try (
 				final Scanner input = new Scanner(new File(filename));
 				final PrintWriter output = new PrintWriter(new FileWriter(filename + ".xyz"));
 			) {
-				final int jump = (int) (1.0 / (Δt * FPS));
+				final int jump = (int) (playbackSpeed / (Δt * FPS));
 				int line = 0;
 				int chunk = 0;
 				while (input.hasNext()) {

@@ -14,6 +14,7 @@
 		protected final double [] space;
 		protected final double drain;
 		protected final double k;
+		protected final double γs;
 		protected final double γ;
 
 		public ContactForce(
@@ -27,6 +28,7 @@
 			this.drain = configuration.getDrain();
 			this.k = configuration.getElasticNormal();
 			this.γ = configuration.getViscousDamping();
+			this.γs = configuration.getSiloDamping();
 		}
 
 		@Override
@@ -35,17 +37,17 @@
 			final double rightξ0 = body.rightξ0(space[0]);
 			final double floorξ0 = body.floorξ0();
 			final double leftξ1 = body.leftξ1(leftξ0);
-			final double rightξ1 = body.rightξ1(rightξ0);
+			final double rightξ1 = body.rightξ1(rightξ0, space[0]);
 			final double floorξ1 = body.floorξ1(floorξ0);
-			return Vector.of(k * leftξ0 + γ * leftξ1, 0.0)
-				.add(Vector.of(-k * rightξ0 - γ * rightξ1, 0.0))
-				.add(Vector.of(0.0, k * floorξ0 + γ * floorξ1))
+			return Vector.of(k * leftξ0 + γs * leftξ1, 0.0)
+				.add(Vector.of(-k * rightξ0 - γs * rightξ1, 0.0))
+				.add(Vector.of(0.0, k * floorξ0 + γs * floorξ1))
 				.add(cache.neighbours(state)
 						.get(body)
 						.stream()
 						.map(p -> {
 							final double ξ0 = body.ξ0(p);
-							final double ξ1 = body.ξ1((GranularParticle) p);
+							final double ξ1 = body.ξ1(ξ0, (GranularParticle) p);
 							return body.normal(p).multiplyBy(-k * ξ0 - γ * ξ1);
 						})
 						.reduce(Vector.ZERO, (F1, F2) -> F1.add(F2)));

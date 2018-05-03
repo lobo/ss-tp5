@@ -43,6 +43,7 @@
 											.build()
 										.getParticles()))
 							.reportEnergy(configuration.getReportEnergy())
+							.reportTime(configuration.getReportTime())
 							.maxTime(configuration.getTime())
 							.by(configuration.getDelta())
 							.spy(output::write)
