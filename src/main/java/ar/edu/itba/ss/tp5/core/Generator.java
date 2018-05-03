@@ -21,6 +21,18 @@
 						"\t\tLoaded particles: " + particles.size() + "\r");
 				}
 			}
+			if (0.0 < builder.drain) addDrain(builder);
+		}
+
+		protected Generator addDrain(final Builder builder) {
+			final double drain0 = 0.5 * (builder.space.getX() - builder.drain);
+			particles.add(new GranularParticle(
+					drain0, 0.0, 0.0,
+					0.0, 0.0, 1.0E+20));
+			particles.add(new GranularParticle(
+					drain0 + builder.drain, 0.0, 0.0,
+					0.0, 0.0, 1.0E+20));
+			return this;
 		}
 
 		public static Builder with(final long seed, final int size) {
@@ -58,6 +70,7 @@
 			protected double mass;
 			protected double minRadius;
 			protected double maxRadius;
+			protected double drain;
 			protected Vector space;
 
 			public Builder(final long seed, final int size) {
@@ -86,6 +99,11 @@
 
 			public Builder in(final double width, final double height) {
 				this.space = Vector.of(width, height);
+				return this;
+			}
+
+			public Builder withDrain(final double drain) {
+				this.drain = drain;
 				return this;
 			}
 		}

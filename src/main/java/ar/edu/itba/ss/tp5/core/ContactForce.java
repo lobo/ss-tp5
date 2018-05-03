@@ -35,7 +35,7 @@
 		public Vector apply(final List<T> state, final T body) {
 			final double leftξ0 = body.leftξ0();
 			final double rightξ0 = body.rightξ0(space[0]);
-			final double floorξ0 = body.floorξ0();
+			final double floorξ0 = body.floorξ0(space[0], drain);
 			final double leftξ1 = body.leftξ1(leftξ0);
 			final double rightξ1 = body.rightξ1(rightξ0, space[0]);
 			final double floorξ1 = body.floorξ1(floorξ0);

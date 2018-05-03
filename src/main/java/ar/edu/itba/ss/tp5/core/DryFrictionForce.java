@@ -31,7 +31,7 @@
 		public Vector apply(final List<T> state, final T body) {
 			final double leftξ0 = body.leftξ0();
 			final double rightξ0 = body.rightξ0(space[0]);
-			final double floorξ0 = body.floorξ0();
+			final double floorξ0 = body.floorξ0(space[0], drain);
 			return Vector.of(0.0, -k * leftξ0 * body.getVy())
 					.add(Vector.of(0.0, -k * rightξ0 * body.getVy()))
 					.add(Vector.of(-k * floorξ0 * body.getVx(), 0.0))

@@ -14,7 +14,10 @@
 
 		@Override
 		public Vector apply(final List<T> state, final T body) {
-			return Vector.of(0.0, -g * body.getMass());
+			if (0.0 < body.getRadius()) {
+				return Vector.of(0.0, -g * body.getMass());
+			}
+			else return Vector.ZERO;
 		}
 
 		@Override

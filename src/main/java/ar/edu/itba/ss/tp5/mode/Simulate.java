@@ -23,7 +23,7 @@
 		@Override
 		public void run(final Configuration configuration) {
 			System.out.println("Simulation...");
-			OutputFile.in(configuration.getOutput())
+			OutputFile.in(configuration)
 				.ifPresent(output -> {
 
 					/*
@@ -37,6 +37,7 @@
 									new GranularFlow<GranularParticle>(configuration),
 									Generator.with(configuration.getGenerator(), configuration.getN())
 										.in(configuration.getWidth(), configuration.getHeight())
+										.withDrain(configuration.getDrain())
 										.mass(configuration.getMass())
 										.minRadius(configuration.getRadius()[0])
 										.maxRadius(configuration.getRadius()[1])

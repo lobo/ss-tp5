@@ -23,8 +23,10 @@
 			return width - x < radius? radius - width + x : 0.0;
 		}
 
-		public double floorξ0() {
-			return y < radius? radius - y : 0.0;
+		public double floorξ0(final double width, final double drain) {
+			final double drain0 = 0.5 * (width - drain);
+			if (drain0 < x && x < drain0 + drain) return 0.0;
+			else return y < radius? radius - y : 0.0;
 		}
 
 		public double leftξ1(final double leftξ0) {
