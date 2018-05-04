@@ -40,6 +40,7 @@ Receives a JSON file with the following format:
     "time"              : "5.0",
     "fps"               : "50",
     "playbackSpeed"     : "1.0",
+    "samplesPerSecond"  : "100",
 
     "integrator"        : "BeemanIntegrator",
     "reportEnergy"      : "false",
@@ -56,7 +57,7 @@ Receives a JSON file with the following format:
     "n"                 : "100",
     "height"            : "1.0",
     "width"             : "0.25",
-    "drain"             : "0.15",
+    "drain"             : "0.05",
     "flowRate"          : "0.1"
 }
 

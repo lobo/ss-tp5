@@ -1,11 +1,13 @@
 
-	package ar.edu.itba.ss.tp5.core;
+	package ar.edu.itba.ss.tp5.core.field;
 
 	import java.util.List;
 
 	import ar.edu.itba.ss.tp4.core.Vector;
 	import ar.edu.itba.ss.tp4.interfaces.ForceField;
 	import ar.edu.itba.ss.tp5.config.Configuration;
+	import ar.edu.itba.ss.tp5.core.GranularParticle;
+	import ar.edu.itba.ss.tp5.core.NeighbourCache;
 
 	public class DryFrictionForce<T extends GranularParticle>
 		implements ForceField<T> {

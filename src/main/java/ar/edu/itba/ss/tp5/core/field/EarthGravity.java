@@ -1,5 +1,5 @@
 
-	package ar.edu.itba.ss.tp5.core;
+	package ar.edu.itba.ss.tp5.core.field;
 
 	import java.util.List;
 

@@ -17,8 +17,9 @@
 		protected String output = "res/data/output.data";
 		protected double delta = 0.00001;
 		protected double time = 5.0;
-		protected int fps = 50;
 		protected double playbackSpeed = 1.0;
+		protected int fps = 50;
+		protected int samplesPerSecond = 100;
 
 		protected String integrator = "BeemanIntegrator";
 		protected boolean reportEnergy = false;
@@ -56,6 +57,10 @@
 
 		public double getPlaybackSpeed() {
 			return playbackSpeed;
+		}
+
+		public int getSamplesPerSecond() {
+			return samplesPerSecond;
 		}
 
 		public String getIntegrator() {
@@ -125,6 +130,7 @@
 					.append("\tDelta: " + delta + " [s]\n")
 					.append("\tTime: " + time + " [s]\n")
 					.append("\tFPS: " + fps + "\n")
+					.append("\tSamples per Second: " + samplesPerSecond + "\n")
 					.append("\tPlayback Speed: x" + playbackSpeed + "\n")
 					.append("\tIntegrator: " + integrator + "\n")
 					.append("\tReport Energy?: " + reportEnergy + "\n")

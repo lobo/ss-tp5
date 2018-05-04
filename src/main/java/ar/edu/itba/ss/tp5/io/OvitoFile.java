@@ -16,12 +16,14 @@
 			final String filename = configuration.getOutput();
 			final int FPS = configuration.getFPS();
 			final int N = configuration.getN();
-			final double Δt = configuration.getDelta();
+			final double Δt = 1.0 / configuration.getSamplesPerSecond();
 			final double playbackSpeed = configuration.getPlaybackSpeed();
 			try (
 				final Scanner input = new Scanner(new File(filename));
 				final PrintWriter output = new PrintWriter(new FileWriter(filename + ".xyz"));
 			) {
+				if (configuration.getSamplesPerSecond() < FPS)
+					throw new IllegalArgumentException();
 				final int jump = (int) (playbackSpeed / (Δt * FPS));
 				int line = 0;
 				int chunk = 0;
@@ -48,6 +50,14 @@
 					++chunk;
 				}
 				return true;
+			}
+			catch (final ArithmeticException exception) {
+				System.out.println(
+					"Se necesitan más muestras. Ajuste 'playbackSpeed' o simule con mayor SPS.");
+			}
+			catch (final IllegalArgumentException exception) {
+				System.out.println(
+					"Se necesitan más muestras. Verifique que FPS <= SPS.");
 			}
 			catch (final FileNotFoundException exception) {
 				System.out.println(

@@ -2,6 +2,7 @@
 	package ar.edu.itba.ss.tp5.mode;
 
 	import java.util.List;
+	import java.util.Random;
 
 	import ar.edu.itba.ss.tp4.core.MassiveParticleFactory;
 	import ar.edu.itba.ss.tp4.core.TimeDrivenSimulation;
@@ -12,9 +13,9 @@
 	import ar.edu.itba.ss.tp4.interfaces.Integrator;
 	import ar.edu.itba.ss.tp5.config.Configuration;
 	import ar.edu.itba.ss.tp5.core.Generator;
-	import ar.edu.itba.ss.tp5.core.GranularFlow;
 	import ar.edu.itba.ss.tp5.core.GranularParticle;
 	import ar.edu.itba.ss.tp5.core.GranularParticleFactory;
+	import ar.edu.itba.ss.tp5.core.field.GranularFlow;
 	import ar.edu.itba.ss.tp5.interfaces.Mode;
 	import ar.edu.itba.ss.tp5.io.OutputFile;
 
@@ -25,11 +26,11 @@
 			System.out.println("Simulation...");
 			OutputFile.in(configuration)
 				.ifPresent(output -> {
-
-					/*
-						Agregar presión en el output.
-					*/
 					try {
+						final Random random = new Random(configuration.getGenerator());
+						final double Δt = configuration.getDelta();
+						final double Δs = 1.0 / configuration.getSamplesPerSecond();
+						final long Δ = Δs < Δt? 1 : Math.round(Δs/Δt);
 						TimeDrivenSimulation.of(
 								buildIntegrator(
 									configuration,
@@ -46,10 +47,12 @@
 							.reportEnergy(configuration.getReportEnergy())
 							.reportTime(configuration.getReportTime())
 							.maxTime(configuration.getTime())
-							.by(configuration.getDelta())
+							.by(Δt)
 							.spy((time, ps) -> {
-								injector(configuration, time, ps);
-								output.write(time, ps);
+								injector(configuration, random, time, ps);
+								if (Math.round(time/Δt) % Δ == 0) {
+									output.write(time, ps);
+								}
 							})
 							.build()
 							.run();
@@ -65,14 +68,20 @@
 		}
 
 		protected void injector(
-				final Configuration configuration,
+				final Configuration configuration, final Random random,
 				final double time, final List<GranularParticle> particles) {
 			for (int i = 0; i < particles.size(); ++i) {
 				final GranularParticle p = particles.get(i);
 				if (p.getY() < -0.1 * configuration.getHeight()) {
-					particles.set(i, new GranularParticle(
-						p.getX(), configuration.getHeight(), p.getRadius(),
-						0.0, 0.0, p.getMass()));
+					final double x = p.getRadius()
+							+ (configuration.getWidth() - 2.0 * p.getRadius())
+							* random.nextDouble();
+					final GranularParticle pNew = new GranularParticle(
+							x, configuration.getHeight(), p.getRadius(),
+							0.0, 0.0, p.getMass());
+					if (!particles.stream().anyMatch(pNew::overlap)) {
+						particles.set(i, pNew);
+					}
 				}
 			}
 		}
