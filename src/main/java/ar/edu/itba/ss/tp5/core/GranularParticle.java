@@ -66,4 +66,8 @@
 		public <T extends MobileParticle> Vector relativeVelocity(final T particle) {
 			return Vector.of(vx - particle.getVx(), vy - particle.getVy());
 		}
+
+		public double perimeter() {
+			return 2.0 * Math.PI * radius;
+		}
 	}

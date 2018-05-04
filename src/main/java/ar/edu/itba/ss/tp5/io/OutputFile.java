@@ -9,14 +9,17 @@
 
 	import ar.edu.itba.ss.tp3.core.MassiveParticle;
 	import ar.edu.itba.ss.tp5.config.Configuration;
+	import ar.edu.itba.ss.tp5.core.ParticleAggregator;
 
 	public class OutputFile {
 
+		protected final ParticleAggregator aggregator;
 		protected final PrintWriter output;
 		protected final boolean hasDrain;
 
 		protected OutputFile(final Configuration configuration)
 				throws IOException {
+			this.aggregator = ParticleAggregator.getInstance();
 			this.output = new PrintWriter(
 					new FileWriter(configuration.getOutput()));
 			this.hasDrain = 0.0 < configuration.getDrain();
@@ -35,15 +38,15 @@
 		}
 
 		public <T extends MassiveParticle> OutputFile write(
-				final double time, final List<T> particles) {
-			int remaining = particles.size() - (hasDrain? 2 : 0);
-			for (final T p : particles) {
-				if (0 < remaining--) {
-					output.println(
-						p.getX() + " " + p.getY() + " " +
-						p.getRadius() + " " + p.getSpeed());
-				}
-				else break;
+				final double time, final List<T> state) {
+			final int particles = state.size() - (hasDrain? 2 : 0);
+			final double [] pressures = aggregator.getAggregation("pressure");
+			for (int i = 0; i < particles; ++i) {
+				final T p = state.get(i);
+				output.println(
+					p.getX() + " " + p.getY() + " " +
+					p.getRadius() + " " + p.getSpeed() + " " +
+					pressures[i]);
 			}
 			return this;
 		}

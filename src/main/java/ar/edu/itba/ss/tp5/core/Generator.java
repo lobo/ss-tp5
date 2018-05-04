@@ -9,10 +9,12 @@
 
 	public class Generator {
 
+		protected final ParticleAggregator aggregator;
 		protected final List<GranularParticle> particles;
 		protected final Random random;
 
 		public Generator(final Builder builder) {
+			this.aggregator = ParticleAggregator.getInstance();
 			this.random = new Random(builder.seed);
 			this.particles = new ArrayList<>(builder.size);
 			while (particles.size() < builder.size) {
@@ -22,6 +24,7 @@
 				}
 			}
 			if (0.0 < builder.drain) addDrain(builder);
+			this.aggregator.addAggregation("pressure", particles.size());
 		}
 
 		protected Generator addDrain(final Builder builder) {

@@ -8,10 +8,12 @@
 	import ar.edu.itba.ss.tp5.config.Configuration;
 	import ar.edu.itba.ss.tp5.core.GranularParticle;
 	import ar.edu.itba.ss.tp5.core.NeighbourCache;
+	import ar.edu.itba.ss.tp5.core.ParticleAggregator;
 
 	public class ContactForce<T extends GranularParticle>
 		implements ForceField<T> {
 
+		protected final ParticleAggregator aggregator;
 		protected final NeighbourCache cache;
 		protected final Vector space;
 		protected final double drain;
@@ -22,6 +24,7 @@
 		public ContactForce(
 				final Configuration configuration,
 				final NeighbourCache cache) {
+			this.aggregator = ParticleAggregator.getInstance();
 			this.space = Vector.of(
 				configuration.getWidth(),
 				configuration.getHeight()
@@ -41,7 +44,7 @@
 			final double leftξ1 = body.leftξ1(leftξ0);
 			final double rightξ1 = body.rightξ1(rightξ0, space.getX());
 			final double floorξ1 = body.floorξ1(floorξ0);
-			return Vector.of(k * leftξ0 + γs * leftξ1, 0.0)
+			final Vector contact = Vector.of(k * leftξ0 + γs * leftξ1, 0.0)
 				.add(Vector.of(-k * rightξ0 - γs * rightξ1, 0.0))
 				.add(Vector.of(0.0, k * floorξ0 + γs * floorξ1))
 				.add(cache.neighbours(state)
@@ -53,6 +56,8 @@
 							return body.normal(p).multiplyBy(-k * ξ0 - γ * ξ1);
 						})
 						.reduce(Vector.ZERO, (F1, F2) -> F1.add(F2)));
+			aggregator.update("pressure", contact.magnitude() / body.perimeter());
+			return contact;
 		}
 
 		@Override
