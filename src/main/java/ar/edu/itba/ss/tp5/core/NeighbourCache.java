@@ -34,7 +34,7 @@
 			}
 			else {
 				final Map<Particle, List<Particle>> nnl = NearNeighbourList
-						.from(new StaticGenerator<>(state))
+						.from(new StaticGenerator<>(state, 0.0))
 						.with(CellIndexMethod
 								.by(OptimalGrid.AUTOMATIC)
 								.build())
@@ -66,7 +66,7 @@
 			}
 
 			public Builder space(final double width, final double height) {
-				this.space = Math.max(width, height);
+				this.space = Math.max(width, 1.1 * height);
 				return this;
 			}
 
@@ -84,9 +84,11 @@
 			implements ParticleGenerator {
 
 			protected final List<T> particles;
+			protected final double maxRadius;
 
-			public StaticGenerator(final List<T> particles) {
+			public StaticGenerator(final List<T> particles, final double maxRadius) {
 				this.particles = particles;
+				this.maxRadius = maxRadius;
 			}
 
 			@Override
@@ -101,7 +103,7 @@
 
 			@Override
 			public double maxRadius() {
-				return 0.0;
+				return maxRadius;
 			}
 		}
 	}

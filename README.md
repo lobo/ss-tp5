@@ -58,7 +58,8 @@ Receives a JSON file with the following format:
     "height"            : "1.0",
     "width"             : "0.3",
     "drain"             : "0.15",
-    "flowRate"          : "0.1"
+    "flowRate"          : "0.1",
+    "injection"         : ["0.75", "1.0"]
 }
 
 ```

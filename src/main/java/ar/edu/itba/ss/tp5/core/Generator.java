@@ -28,12 +28,13 @@
 		}
 
 		protected Generator addDrain(final Builder builder) {
+			final double base = 0.1 * builder.space.getY();
 			final double drain0 = 0.5 * (builder.space.getX() - builder.drain);
 			particles.add(new GranularParticle(
-					drain0, 0.0, 0.0,
+					drain0, base, 0.0,
 					0.0, 0.0, 1.0E+20));
 			particles.add(new GranularParticle(
-					drain0 + builder.drain, 0.0, 0.0,
+					drain0 + builder.drain, base, 0.0,
 					0.0, 0.0, 1.0E+20));
 			return this;
 		}
@@ -47,13 +48,14 @@
 		}
 
 		protected GranularParticle newParticle(final Builder builder) {
+			final double base = 0.1 * builder.space.getY();
 			final double Δradius = builder.maxRadius - builder.minRadius;
 			final double radius = Δradius * random.nextDouble() + builder.minRadius;
 			final Vector r0 = Vector.of(radius, radius)
 					.add(Vector.of(
 						(builder.space.getX() - 2.0 * radius) * random.nextDouble(),
 						(builder.space.getY() - 2.0 * radius) * random.nextDouble()));
-			return new GranularParticle(r0.getX(), r0.getY(), radius, 0.0, 0.0, builder.mass);
+			return new GranularParticle(r0.getX(), r0.getY() + base, radius, 0.0, 0.0, builder.mass);
 		}
 
 		protected boolean addWithoutCollision(final Builder builder) {

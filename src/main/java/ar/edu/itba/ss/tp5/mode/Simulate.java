@@ -85,14 +85,19 @@
 				final Configuration configuration, final Random random,
 				final double time, final List<GranularParticle> particles) {
 			final double [] flows = aggregator.getAggregation("drain");
+			final double range = configuration.getInjection()[1] - configuration.getInjection()[0];
+			final double base = 0.1 * configuration.getHeight();
 			for (int i = 0; i < particles.size(); ++i) {
 				final GranularParticle p = particles.get(i);
-				if (p.getY() < -0.1 * configuration.getHeight()) {
+				if (p.getY() < 0.0) {
 					final double x = p.getRadius()
 							+ (configuration.getWidth() - 2.0 * p.getRadius())
 							* random.nextDouble();
+					final double y = p.getRadius()
+							+ (range - 2.0 * p.getRadius()) * random.nextDouble()
+							+ configuration.getInjection()[0] + base;
 					final GranularParticle pNew = new GranularParticle(
-							x, configuration.getHeight(), p.getRadius(),
+							x, y, p.getRadius(),
 							0.0, 0.0, p.getMass());
 					if (!particles.stream().anyMatch(pNew::overlap)) {
 						particles.set(i, pNew);

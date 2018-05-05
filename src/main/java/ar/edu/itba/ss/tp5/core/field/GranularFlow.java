@@ -18,7 +18,7 @@
 		protected final DryFrictionForce<T> friction;
 
 		public GranularFlow(final Configuration configuration) {
-			this.cache = NeighbourCache.ofDeep(2)
+			this.cache = NeighbourCache.ofDeep(4)
 				.space(configuration.getWidth(), configuration.getHeight())
 				.interactionRadius(configuration.getRadius()[1])
 				.build();
@@ -31,7 +31,6 @@
 		public Vector apply(
 				final List<T> state,
 				final T body) {
-			
 			return gravity.apply(state, body)
 					.add(contact.apply(state, body))
 					.add(friction.apply(state, body));

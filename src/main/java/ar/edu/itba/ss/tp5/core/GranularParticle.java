@@ -24,10 +24,11 @@
 		}
 
 		public double floorξ0(final Vector space, final double drain) {
+			final double base = 0.1 * space.getY();
 			final double drain0 = 0.5 * (space.getX() - drain);
 			if (drain0 < x && x < drain0 + drain) return 0.0;
-			else if (y < -radius) return 0.0;
-			else return y < radius? radius - y : 0.0;
+			else if (y < (base - radius)) return 0.0;
+			else return y < (base + radius)? base + radius - y : 0.0;
 		}
 
 		public double leftξ1(final double leftξ0) {

@@ -24,13 +24,13 @@
 				lastStep.push(0);
 				Files.lines(Paths.get(filename))
 					.map(line -> Double.parseDouble(line.split("\\s")[0]))
-					.collect(groupingBy(time -> window * Math.ceil((time/window))))
+					.collect(groupingBy(time -> (int) Math.ceil((time/window))))
 					.entrySet()
 					.stream()
 					.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
 					.forEachOrdered(entry -> {
-						final double time = entry.getKey();
-						final int step = (int) Math.ceil((time/window));
+						final int step = entry.getKey();
+						final double time = step * window;
 						for (int i = lastStep.pop(); i < step; ++i) {
 							output.write((i * window) + " " + 0 + "\n");
 						}

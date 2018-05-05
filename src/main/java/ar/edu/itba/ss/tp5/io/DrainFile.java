@@ -17,6 +17,7 @@
 		protected final ParticleAggregator aggregator;
 		protected final PrintWriter output;
 		protected final boolean hasDrain;
+		protected final double base;
 
 		protected DrainFile(final Configuration configuration)
 				throws IOException {
@@ -25,7 +26,8 @@
 			this.output = new PrintWriter(
 					new FileWriter(configuration.getOutput() + ".drain"));
 			this.hasDrain = 0.0 < configuration.getDrain();
-			Arrays.fill(this.aggregator.getAggregation("drain"), 1.0);
+			this.base = 0.1 * configuration.getHeight();
+			Arrays.fill(this.aggregator.getAggregation("drain"), base + 1.0);
 		}
 
 		public static Optional<DrainFile> in(
@@ -46,8 +48,8 @@
 			final double [] flows = aggregator.getAggregation("drain");
 			for (int i = 0; i < particles; ++i) {
 				final T p = state.get(i);
-				if (flows[i] < 0.0) {}
-				else if (p.getY() < 0.0) {
+				if (flows[i] < base) {}
+				else if (p.getY() < base) {
 					output.println(time + " " + i);
 					flows[i] = p.getY();
 				}

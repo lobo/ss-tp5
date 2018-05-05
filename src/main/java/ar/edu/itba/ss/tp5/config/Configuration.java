@@ -39,6 +39,8 @@
 		protected double drain = 0.15;
 		protected double flowRate = 0.1;
 
+		protected double [] injection = {1.0, 1.0};
+
 		public String getOutput() {
 			return output;
 		}
@@ -77,6 +79,10 @@
 
 		public double [] getRadius() {
 			return radius;
+		}
+
+		public double [] getInjection() {
+			return injection;
 		}
 
 		public double getMass() {
@@ -125,7 +131,7 @@
 
 		@Override
 		public String toString() {
-			return new StringBuilder(512)
+			return new StringBuilder(530)
 					.append("\tOutput: " + output + "\n")
 					.append("\tDelta: " + delta + " [s]\n")
 					.append("\tTime: " + time + " [s]\n")
@@ -146,6 +152,7 @@
 					.append("\tHeight: " + height + " [m]\n")
 					.append("\tWidth: " + width + " [m]\n")
 					.append("\tDrain Gate: " + drain + " [m]\n")
+					.append("\tInjection: (" + injection[0] + ", " + injection[1] + ") [m]\n")
 					.append("\tFlow Rate Window: " + flowRate + " [s]\n")
 					.toString();
 		}
