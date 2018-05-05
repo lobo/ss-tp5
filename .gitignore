@@ -26,7 +26,9 @@ target/
 #
 
 *.data
+*.drain
+*.flow
 *.json
+*.small
 *.txt
 *.xyz
-*.small

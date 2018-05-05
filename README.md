@@ -26,7 +26,7 @@ Or do it manually, if you prefer.
 In the root folder (after build):
 
 ```
-$ java -jar target/tp5-1.0-SNAPSHOT.jar <simulate | animate>
+$ java -jar target/tp5-1.0-SNAPSHOT.jar <simulate | animate | flow>
 ```
 
 ## Configuration
@@ -37,7 +37,7 @@ Receives a JSON file with the following format:
 {
     "output"            : "res/data/output.data",
     "delta"             : "0.00001",
-    "time"              : "5.0",
+    "time"              : "15.0",
     "fps"               : "50",
     "playbackSpeed"     : "1.0",
     "samplesPerSecond"  : "100",
@@ -48,16 +48,16 @@ Receives a JSON file with the following format:
     "radius"            : ["0.01", "0.015"],
     "mass"              : "0.01",
 
-    "elasticNormal"     : "1.0E+3",
-    "elasticTangent"    : "2.0E+3",
-    "viscousDamping"    : "1.0E+2",
-    "siloDamping"       : "20.0",
+    "elasticNormal"     : "1.0E+4",
+    "elasticTangent"    : "2.0E+4",
+    "viscousDamping"    : "20.0",
+    "siloDamping"       : "15.0",
 
     "generator"         : "64684095347601931",
     "n"                 : "100",
     "height"            : "1.0",
-    "width"             : "0.25",
-    "drain"             : "0.05",
+    "width"             : "0.3",
+    "drain"             : "0.15",
     "flowRate"          : "0.1"
 }
 
@@ -67,17 +67,51 @@ Receives a JSON file with the following format:
 
 ### Simulation File (_\*.data_)
 
+The complete simulation results. Includes the speed and pressure over every
+particle in every simulation step.
+
 ```
-<x> <y> <r> <speed>
+<x> <y> <r> <speed> <pressure>
+...
+```
+
+### Flow Rate File (_\*.drain_)
+
+This file contains the complete drain (_i.e._, the ID of a particle
+drained at a certain time).
+
+```
+<t> <id>
+...
+```
+
+### Windowed Flow Rate File (_\*.flow_)
+
+This is the windowed flow per unit of temporal step. The units are in
+_[particles/second]_.
+
+```
+<t> <flow>
+...
+```
+
+### Small Simulation File (_\*.small_)
+
+This is a reduced form of the simulation file, but sub-sampled.
+
+```
+<x> <y> <r> <speed> <pressure>
 ...
 ```
 
 ### Animation File (_\*.xyz_)
 
+This file can be used in _Ovito_ to render the simulation.
+
 ```
 <N>
 <t0>
-<x> <y> <r> <speed>
+<x> <y> <r> <speed> <pressure>
 ...
 ```
 

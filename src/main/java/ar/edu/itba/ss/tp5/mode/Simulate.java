@@ -15,53 +15,66 @@
 	import ar.edu.itba.ss.tp5.core.Generator;
 	import ar.edu.itba.ss.tp5.core.GranularParticle;
 	import ar.edu.itba.ss.tp5.core.GranularParticleFactory;
+	import ar.edu.itba.ss.tp5.core.ParticleAggregator;
 	import ar.edu.itba.ss.tp5.core.field.GranularFlow;
 	import ar.edu.itba.ss.tp5.interfaces.Mode;
+	import ar.edu.itba.ss.tp5.io.DrainFile;
 	import ar.edu.itba.ss.tp5.io.OutputFile;
 
 	public class Simulate implements Mode {
+
+		protected final ParticleAggregator aggregator;
+
+		public Simulate() {
+			this.aggregator = ParticleAggregator.getInstance();
+		}
 
 		@Override
 		public void run(final Configuration configuration) {
 			System.out.println("Simulation...");
 			OutputFile.in(configuration)
 				.ifPresent(output -> {
-					try {
-						final Random random = new Random(configuration.getGenerator());
-						final double Δt = configuration.getDelta();
-						final double Δs = 1.0 / configuration.getSamplesPerSecond();
-						final long Δ = Δs < Δt? 1 : Math.round(Δs/Δt);
-						TimeDrivenSimulation.of(
-								buildIntegrator(
-									configuration,
-									new GranularParticleFactory<GranularParticle>(),
-									new GranularFlow<GranularParticle>(configuration),
-									Generator.with(configuration.getGenerator(), configuration.getN())
-										.in(configuration.getWidth(), configuration.getHeight())
-										.withDrain(configuration.getDrain())
-										.mass(configuration.getMass())
-										.minRadius(configuration.getRadius()[0])
-										.maxRadius(configuration.getRadius()[1])
-											.build()
-										.getParticles()))
-							.reportEnergy(configuration.getReportEnergy())
-							.reportTime(configuration.getReportTime())
-							.maxTime(configuration.getTime())
-							.by(Δt)
-							.spy((time, ps) -> {
-								injector(configuration, random, time, ps);
-								if (Math.round(time/Δt) % Δ == 0) {
-									output.write(time, ps);
-								}
-								// Add flow file...
-							})
-							.build()
-							.run();
-					}
-					catch (final ClassNotFoundException exception) {
+					DrainFile.in(configuration).ifPresent(flow -> {
+						try {
+							final Random random = new Random(1 + configuration.getGenerator());
+							final double Δt = configuration.getDelta();
+							final double Δs = 1.0 / configuration.getSamplesPerSecond();
+							final long Δ = Δs < Δt? 1 : Math.round(Δs/Δt);
+							TimeDrivenSimulation.of(
+									buildIntegrator(
+										configuration,
+										new GranularParticleFactory<GranularParticle>(),
+										new GranularFlow<GranularParticle>(configuration),
+										Generator.with(configuration.getGenerator(), configuration.getN())
+											.in(configuration.getWidth(), configuration.getHeight())
+											.withDrain(configuration.getDrain())
+											.mass(configuration.getMass())
+											.minRadius(configuration.getRadius()[0])
+											.maxRadius(configuration.getRadius()[1])
+												.build()
+											.getParticles()))
+								.reportEnergy(configuration.getReportEnergy())
+								.reportTime(configuration.getReportTime())
+								.maxTime(configuration.getTime())
+								.by(Δt)
+								.spy((time, state) -> {
+									injector(configuration, random, time, state);
+									if (Math.round(time/Δt) % Δ == 0) {
+										output.write(time, state);
+										flow.write(time, state);
+									}
+								})
+								.build()
+								.run();
+						}
+						catch (final ClassNotFoundException exception) {
+							System.out.println(
+								"El integrador es desconocido. Especifique otro.");
+						}
 						System.out.println(
-							"El integrador es desconocido. Especifique otro.");
-					}
+							"\tEl flujo fue almacenado con éxito.");
+						flow.close();
+					});
 					System.out.println(
 						"\tLa simulación fue almacenada con éxito.");
 					output.close();
@@ -71,6 +84,7 @@
 		protected void injector(
 				final Configuration configuration, final Random random,
 				final double time, final List<GranularParticle> particles) {
+			final double [] flows = aggregator.getAggregation("drain");
 			for (int i = 0; i < particles.size(); ++i) {
 				final GranularParticle p = particles.get(i);
 				if (p.getY() < -0.1 * configuration.getHeight()) {
@@ -82,6 +96,7 @@
 							0.0, 0.0, p.getMass());
 					if (!particles.stream().anyMatch(pNew::overlap)) {
 						particles.set(i, pNew);
+						flows[i] = pNew.getY();
 					}
 				}
 			}
