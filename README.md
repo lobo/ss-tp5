@@ -36,15 +36,15 @@ Receives a JSON file with the following format:
 ```json
 {
     "output"            : "res/data/output.data",
-    "delta"             : "0.00001",
+    "delta"             : "0.00003",
     "time"              : "15.0",
     "fps"               : "50",
-    "playbackSpeed"     : "1.0",
-    "samplesPerSecond"  : "100",
+    "playbackSpeed"     : "0.5",
+    "samplesPerSecond"  : "200",
 
     "integrator"        : "BeemanIntegrator",
     "reportEnergy"      : "false",
-    "reportTime"        : "false",
+    "reportTime"        : "true",
     "radius"            : ["0.01", "0.015"],
     "mass"              : "0.01",
 
@@ -54,9 +54,9 @@ Receives a JSON file with the following format:
     "siloDamping"       : "15.0",
 
     "generator"         : "64684095347601931",
-    "n"                 : "100",
+    "n"                 : "370",
     "height"            : "1.0",
-    "width"             : "0.3",
+    "width"             : "0.4",
     "drain"             : "0.15",
     "flowRate"          : "0.1",
     "injection"         : ["0.75", "1.0"]
@@ -118,7 +118,12 @@ This file can be used in _Ovito_ to render the simulation.
 
 ## Videos
 
-...
+* [Simulation N° 1: Drain 0.15](https://youtu.be/ZKFEjTMVARc)
+* [Simulation N° 2: Drain 0.19](https://youtu.be/qytGS5KxaJ8)
+* [Simulation N° 3: Drain 0.23](https://youtu.be/HZCMRGUbaJE)
+* [Simulation N° 4: Drain 0.27](https://youtu.be/Dv1cnYnHJM8)
+* [Simulation N° 5.1: Steady State (critic damping)](https://youtu.be/BrpwOBUKvJQ)
+* [Simulation N° 5.2: Steady State (over-critic damping)](https://youtu.be/lU_Bl-VyUFk)
 
 ## Developers
 
