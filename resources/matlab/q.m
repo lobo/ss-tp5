@@ -8,7 +8,7 @@ N = 370;
 W = 0.3;
 H = 0.6175;
 d = [ 0.15 0.17 0.19 0.23 ];
-k = 4; % Numero a dibujar
+k = 7.088; % Numero a dibujar
 Q_teo = (N/(W*H))*sqrt(g)*((d-k*((R_min+R_max)/2)).^(3/2));
 h1 = plot(d,Q_teo,'-o','LineWidth',2);
 %% Plot experimental
