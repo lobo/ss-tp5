@@ -1,4 +1,4 @@
-![...](res/image/readme-header.png)
+![...](resources/image/readme-header.png)
 
 # Simulation N° 5: Granular Flow
 
