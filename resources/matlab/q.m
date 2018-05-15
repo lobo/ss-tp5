@@ -6,14 +6,14 @@ R_max = 0.015; % [m]
 m = 0.01; % [kg]
 N = 370;
 W = 0.3;
-H = 1;
-d = [ 0.15 0.19 0.23 0.27 ];
+H = 0.6175;
+d = [ 0.15 0.17 0.19 0.23 ];
 k = 4; % Numero a dibujar
 Q_teo = (N/(W*H))*sqrt(g)*((d-k*((R_min+R_max)/2)).^(3/2));
 h1 = plot(d,Q_teo,'-o','LineWidth',2);
 %% Plot experimental
 hold on
-Q_exp = [121.0294118 196.2745098 304.9673203 561.6339869];
+Q_exp = [121.0294118 166.0784 196.2745098 304.9673203];
 % return
 h2 = plot(d,Q_exp,'-o','LineWidth',2);
     % Plot error
